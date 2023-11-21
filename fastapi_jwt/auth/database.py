@@ -5,7 +5,7 @@ from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy import TIMESTAMP, Boolean,ForeignKey, Integer, String, JSON, Column
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, declarative_base
 
 from config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
 from models.models import role
@@ -13,10 +13,10 @@ from models.models import role
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
+class Base:
+    __allow_unmapped__ = True
 
-class Base(DeclarativeBase):
-    pass
-
+Base = declarative_base(cls=Base)
 
 class User(SQLAlchemyBaseUserTable[int], Base):
 
@@ -24,7 +24,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
             Integer, primary_key=True
         )
     email: Column(
-            String(length=320), unique=True, index=True, nullable=False
+            String, nullable=False
         )
     username: Column(
             String, nullable=False
@@ -54,11 +54,6 @@ class User(SQLAlchemyBaseUserTable[int], Base):
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
-
-
-async def create_db_and_tables():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
