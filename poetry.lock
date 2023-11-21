@@ -372,17 +372,6 @@ fastapi-users = ">=10.0.0"
 sqlalchemy = {version = ">=2.0.0,<2.1.0", extras = ["asyncio"]}
 
 [[package]]
-name = "fastapy"
-version = "1.0.3"
-description = "A lightweight Python module to read and write FASTA sequence records"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "fastapy-1.0.3-py3-none-any.whl", hash = "sha256:6f1041f393f32e98749017ed2177e52f77dc61d98727d691c26b360045c869ab"},
-    {file = "fastapy-1.0.3.tar.gz", hash = "sha256:0ffeb63f1f1b7b5bb39d44b69528dd0237753498254271dfb540f9ab271fd539"},
-]
-
-[[package]]
 name = "greenlet"
 version = "3.0.1"
 description = "Lightweight in-process concurrent programming"
@@ -928,4 +917,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "9f70ef31943b433a3724971145438d2dbf3b358133ed9867e811356d9c78b7d2"
+content-hash = "d70de41f70ce00b2fd8d1a27d57751b912c02ef33cdd2693dbbd6f7ad44ee90b"
