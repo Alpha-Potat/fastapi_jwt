@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
-from models.models import Role
+from models.models import role
 
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -27,14 +27,11 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     username: Mapped[str]=mapped_column(
             String, nullable=False
         )
-    password: Mapped[str]=mapped_column(
-            String, nullable=False
-        )
     registered_at: Mapped[int]=mapped_column(
-            TIMESTAMP, default=datetime.utcnow
+            TIMESTAMP(timezone=True), default=datetime.utcnow
         )
     role_id: Mapped[int]=mapped_column(
-            Integer, ForeignKey("Role.id", ondelete="CASCADE")
+            Integer, ForeignKey(role.c.id, ondelete="CASCADE")
         )
     hashed_password: Mapped[str]=mapped_column(
             String, nullable=False
