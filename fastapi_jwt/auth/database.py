@@ -5,49 +5,47 @@ from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 from sqlalchemy import TIMESTAMP, Boolean,ForeignKey, Integer, String, JSON, Column
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase, declarative_base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS
-from models.models import role
+from models.models import Role
 
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-class Base:
-    __allow_unmapped__ = True
-
-Base = declarative_base(cls=Base)
+class Base(DeclarativeBase):
+    pass
 
 class User(SQLAlchemyBaseUserTable[int], Base):
 
-    id : Column(
+    id : Mapped[int]=mapped_column(
             Integer, primary_key=True
         )
-    email: Column(
+    email: Mapped[str]=mapped_column(
             String, nullable=False
         )
-    username: Column(
+    username: Mapped[str]=mapped_column(
             String, nullable=False
         )
-    password: Column(
+    password: Mapped[str]=mapped_column(
             String, nullable=False
         )
-    registered_at: Column(
+    registered_at: Mapped[int]=mapped_column(
             TIMESTAMP, default=datetime.utcnow
         )
-    role_id: Column(
-            Integer, ForeignKey(role.c.id, ondelete="CASCADE")
+    role_id: Mapped[int]=mapped_column(
+            Integer, ForeignKey("Role.id", ondelete="CASCADE")
         )
-    hashed_password: Column(
-            String(length=1024), nullable=False
+    hashed_password: Mapped[str]=mapped_column(
+            String, nullable=False
         )
-    is_active: Column(
+    is_active: Mapped[bool]=mapped_column(
             Boolean, default=True, nullable=False
         )
-    is_superuser: Column(
+    is_superuser: Mapped[bool]=mapped_column(
             Boolean, default=False, nullable=False
         )
-    is_verified: Column(
+    is_verified: Mapped[bool]=mapped_column(
             Boolean, default=False, nullable=False
         )
 
