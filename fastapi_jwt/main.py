@@ -8,6 +8,7 @@ from auth.database import User
 from auth.manager import get_user_manager
 
 
+
 app = FastAPI()
 
 fastapi_users = FastAPIUsers[User, int](
